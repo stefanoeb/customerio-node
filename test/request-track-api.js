@@ -53,8 +53,10 @@ test('#handler returns a promise', (t) => {
 
 test('#handler makes a request and resolves a promise on success', (t) => {
   const body = {};
-  t.context.req._request = (options, cb) => {
-    cb(null, { statusCode: 200 }, JSON.stringify(body));
+  t.context.req._axios = (options) => {
+    return new Promise((resolve) => {
+      resolve({ status: 200, data: body });
+    });
   };
   return t.context.req.handler(putOptions).then((res) => t.deepEqual(res, body));
 });
@@ -66,10 +68,12 @@ test('#handler makes a request and rejects with an error on failure', (t) => {
   });
 
   const message = 'test error message';
-  const body = { meta: { error: message } };
+  const body = { statusText: message };
 
-  t.context.req._request = (options, cb) => {
-    cb(null, { statusCode: 400 }, JSON.stringify(body));
+  t.context.req._axios = (options) => {
+    return new Promise((resolve) => {
+      resolve({ status: 400, statusText: message, data: body });
+    });
   };
 
   return t.context.req.handler(customOptions).catch((err) => t.is(err.message, message));
