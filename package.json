@@ -14,7 +14,8 @@
   },
   "bugs": "https://github.com/customerio/customerio-node/issues",
   "dependencies": {
-    "axios": "^0.21.1"
+    "axios": "^0.21.1",
+    "react-native-base64": "^0.2.1"
   },
   "devDependencies": {
     "ava": "^3.13.0",

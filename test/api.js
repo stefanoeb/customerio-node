@@ -1,6 +1,7 @@
 const test = require('ava');
 const sinon = require('sinon');
 const { APIClient, SendEmailRequest } = require('../api');
+const base64 = require('react-native-base64');
 
 const apiRoot = 'https://api.customer.io/v1';
 
@@ -34,7 +35,7 @@ test('#sendEmail: adding attachments with encoding (default)', (t) => {
   let req = new SendEmailRequest({ identifiers: { id: '2' }, transactional_message_id: 1 });
 
   req.attach('test', 'hello world');
-  t.is(req.message.attachments.test, Buffer.from('hello world').toString('base64'));
+  t.is(req.message.attachments.test, base64.encode('hello world'));
 });
 
 test('#sendEmail: adding attachments without encoding', (t) => {
@@ -51,7 +52,7 @@ test('#sendEmail: adding attachments twice throws an error', (t) => {
 
   req.attach('test', 'test content');
   t.throws(() => req.attach('test', 'test content 2'), { message: /attachment test already exists/ });
-  t.is(req.message.attachments.test, Buffer.from('test content').toString('base64'));
+  t.is(req.message.attachments.test, base64.encode('test content'));
 });
 
 test('#sendEmail: error', async (t) => {

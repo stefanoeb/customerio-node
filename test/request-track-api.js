@@ -1,13 +1,14 @@
 const test = require('ava');
 const sinon = require('sinon');
 const Request = require('../lib/request');
+const base64 = require('react-native-base64');
 
 // setup & fixture data
 const siteId = 123;
 const apiKey = 'abc';
 const uri = 'https://track.customer.io/api/v1/customers/1';
 const data = { first_name: 'Bruce', last_name: 'Wayne' };
-const auth = `Basic ${Buffer.from(`${siteId}:${apiKey}`).toString('base64')}`;
+const auth = `Basic ${base64.encode(`${siteId}:${apiKey}`)}`;
 const baseOptions = {
   uri,
   headers: {
